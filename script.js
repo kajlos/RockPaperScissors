@@ -1,54 +1,69 @@
 const Outcomes = ['rock','paper','scissors'];
-function computerSelection(){
+function computerSelection(){                   
     let random = Math.floor(Math.random() * Outcomes.length);
     let result = Outcomes[random];
     return result;
 }
-//let computerChoice = computerSelection();
-function playerSelection(){
-    while(true){
-    let playerChoice = prompt("Please select rock paper or scissors");
-    let choice = playerChoice.toLowerCase();
-    if (choice == "rock" || choice == "paper" || choice =="scissors"){
-        return choice;
-    }
-    else{
-        alert("Wrong selection, please type exactly rock or paper or scissors");
-    }
-}
-}
+
+// function playerSelection(){
+//     while(true){
+//     let playerChoice = prompt("Please select rock paper or scissors");
+//     let choice = playerChoice.toLowerCase();
+//     if (choice == "rock" || choice == "paper" || choice =="scissors"){
+//         return choice;
+//     }
+//     else{
+//         alert("Wrong selection, please type exactly rock or paper or scissors");
+//     }
+// }
+// }
 //let playerChoice = playerSelection();
 
-
-function round(){
-    let comupterWins = 0;
-    let playerWins = 0;
-    for(let rounds =1; rounds <= 5; rounds++){
-        let computer = computerSelection();
-        let player= playerSelection();
-        console.log("Round " + rounds);
-        console.log('Computer chose: ' + computer);
-        console.log('Player chose: ' + player);
-
+let rounds=0;   
+let comupterWins = 0;
+let playerWins = 0;
+function round(player){
+    let scores = document.querySelector('.score');
+    let result = document.querySelector('.result');
+    let whoWon = document.querySelector('.whoWon');
+    let choice = document.querySelector('.choice');
+    whoWon.textContent = '';
+    let computer = computerSelection();   
+    choice.textContent = `Computer chose: ${computer}, you chose ${player}. `
         if (computer == player){
-            console.log("Draw")
+            scores.textContent="Draw";
+            result.textContent=`Current standings: Computer ${comupterWins} - ${playerWins} Player`;
         } else if((computer =='rock' && player =='scissors') ||(computer =='paper' && player =='rock') || (computer =='scissors' && player =='paper')){
-            console.log("Computer won this round");
+            scores.textContent="Computer won this round";
             comupterWins += 1;
+            result.textContent=`Current standings: Computer ${comupterWins} - ${playerWins} Player`;
+            
         }else{
-            console.log("You won this round");
+            scores.textContent="You won this round";
             playerWins += 1;
+            result.textContent=`Current standings: Computer ${comupterWins} - ${playerWins} Player`;
+            
         }
-        console.log(`Current standings: Computer ${comupterWins}, Player ${playerWins} `);
-        
-    }
-    if (comupterWins == playerWins){
-            console.log(`There was a draw with a score: computer ${comupterWins} player ${playerWins}`);
-        } else if(comupterWins > playerWins){
-            console.log(`Computer won with a score: computer ${comupterWins} player ${playerWins}`);
+        if(comupterWins == 5 || playerWins == 5){
+            if(comupterWins > playerWins){
+            whoWon.textContent=`Computer won the game!`;
+            comupterWins=0;
+            playerWins=0;
         } else{
-            console.log(`You won with a score: computer ${comupterWins} player ${playerWins} `);
+            whoWon.textContent=`You won the game`;
+            comupterWins=0;
+            playerWins=0;
+        } 
         }
+
+        rounds++;
 }
 
-round();
+
+
+let button = document.querySelectorAll('button');
+button.forEach(b => {
+    b.addEventListener('click',()=>{
+        round(b.id);
+    })
+});
